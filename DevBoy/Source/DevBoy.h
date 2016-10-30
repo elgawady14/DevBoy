@@ -80,4 +80,10 @@ typedef NS_ENUM(NSUInteger, SpeedUnit) {
 
 - (CLLocationSpeed)topSpeedWithUnit:(SpeedUnit)speedUnit;
 
+- (void)handleLocationUpdate:(CLLocation *)location;
+
+- (void)createRegionForRoute;
+
+- (void)createPolylineForRoute;
+
 @end

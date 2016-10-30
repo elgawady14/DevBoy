@@ -12,6 +12,9 @@
 @interface DemoView () {
     
     BOOL _tracking;
+    NSMutableArray *dummyData;
+    NSTimer *timer;
+    int counter;
 }
 
 @end
@@ -85,12 +88,24 @@
     
     self.maxAltitudeView = [[MetricView alloc] initWithImage:[UIImage imageNamed:@"maxAlt"] title:@"Max Altitude" color:[UIColor whiteColor]];
     [self.containerView addSubview:self.maxAltitudeView];
+    
+    // dummy
+    
+    if ([self retrieveData] != nil) {
+        
+        dummyData = [self retrieveData];
+    } else {
+        
+        dummyData = [NSMutableArray new];
+    }
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.125 target:self selector:@selector(drawOnMap) userInfo:nil repeats:true];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    [self.mapView anchorTopCenterFillingWidthWithLeftAndRightPadding:10 topPadding:20 height:250];
+    [self.mapView anchorTopCenterFillingWidthWithLeftAndRightPadding:10 topPadding:20 height:380];
     [self.maskView anchorTopCenterFillingWidthWithLeftAndRightPadding:0 topPadding:0 height:75];
     [self.avatarImageView anchorCenterLeftWithLeftPadding:10 width:60 height:60];
     [self.dateLabel alignToTheRightOf:self.avatarImageView matchingTopAndFillingWidthWithLeftAndRightPadding:10 height:20];
@@ -125,6 +140,7 @@
     
     [_mapView addOverlay:self.devBoy.routePolyline];
     [_mapView setRegion:self.devBoy.routeRegion animated:YES];
+    [self saveDataFromArray:dummyData];
 }
 
 - (void)devBoyDidUpdate:(DevBoy *)devBoy {
@@ -148,20 +164,116 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    
+    NSLog(@"longitude :: %f latitude :: %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
+    
     if (_tracking) {
         [mapView setRegion:MKCoordinateRegionMake(userLocation.coordinate, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.longitude]];
+        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.latitude]];
     }
 }
 
 
-#pragma mark - Utils
+#pragma mark - SAVE DATA
 
-- (UILabel *)newLabelWithColor:(UIColor *)color {
-    UILabel *label = [UILabel new];
-    label.textColor = [UIColor whiteColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [UIColor redColor];
-    return label;
+- (void) saveDataFromArray:(NSMutableArray*) dummyData2 {
+    
+    //Get the documents directory path
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"myfile.plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if (![fileManager fileExistsAtPath: path]) {
+        
+        path = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithFormat:@"myfile.plist"] ];
+    }
+    
+    NSMutableDictionary *data;
+    
+    if ([fileManager fileExistsAtPath: path]) {
+        
+        data = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
+    }
+    else {
+        // If the file doesn’t exist, create an empty dictionary
+        data = [[NSMutableDictionary alloc] init];
+    }
+    
+    //To insert the data into the plist
+    [data setObject:dummyData2 forKey:@"dummyData"];
+    [data writeToFile:path atomically:YES];
+}
+
+-(NSMutableArray*) retrieveData {
+    
+    //Get the documents directory path
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"myfile.plist"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if (![fileManager fileExistsAtPath: path]) {
+        
+        path = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithFormat:@"myfile.plist"] ];
+    }
+    
+    //To reterive the data from the plist
+    NSMutableDictionary *savedValue = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
+    
+    NSMutableArray *dummyData2 = [savedValue objectForKey:@"dummyData"];
+    
+    return dummyData2;
+}
+
+-(void) drawOnMap {
+    
+//    if (counter % 2 == 0) {
+// 
+//        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[dummyData objectAtIndex:counter+1] floatValue], [[dummyData objectAtIndex:counter] floatValue]);
+//        [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+//    }
+//    else {
+//        
+//        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[dummyData objectAtIndex:counter+1] floatValue], [[dummyData objectAtIndex:counter] floatValue]);
+//        [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+//
+//        counter++;
+//    }
+    
+    if (counter >= dummyData.count) {
+        
+        
+        [_devBoy createPolylineForRoute];
+        [_devBoy createRegionForRoute];
+        [_mapView addOverlay:self.devBoy.routePolyline];
+        [_mapView setRegion:self.devBoy.routeRegion animated:YES];
+        [timer invalidate];
+    }
+    else {
+        
+        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[dummyData objectAtIndex:counter+1] floatValue], [[dummyData objectAtIndex:counter] floatValue]);
+        [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+        
+        
+        [_devBoy handleLocationUpdate:[[CLLocation alloc] initWithLatitude:[[dummyData objectAtIndex:counter+1] floatValue] longitude:[[dummyData objectAtIndex:counter] floatValue]]];
+        
+        [_devBoy.routeLocations addObject:[[CLLocation alloc] initWithLatitude:[[dummyData objectAtIndex:counter+1] floatValue] longitude:[[dummyData objectAtIndex:counter] floatValue]]];
+        
+        counter += 2;
+    }
+    
+    
+
+    
+
+
+
+    
+    
+    
+  
 }
 
 @end

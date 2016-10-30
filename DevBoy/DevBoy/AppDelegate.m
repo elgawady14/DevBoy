@@ -22,8 +22,14 @@
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = [DemoView new];
     [self.window makeKeyAndVisible];
-    
+    NSLog(@"%@", [self getDocumentsPath]);
     return YES;
+}
+
+- (NSString *)getDocumentsPath
+{
+    return [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                    inDomains:NSUserDomainMask] lastObject] absoluteString];
 }
 
 
