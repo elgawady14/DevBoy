@@ -8,6 +8,8 @@
 
 #import "DemoView.h"
 #import <UIView+Facade.h>
+#import "Helper.h"
+#import "DevBoy-Swift.h"
 
 @interface DemoView () {
     
@@ -31,7 +33,7 @@
     
     self.devBoy = [DevBoy new];
     self.devBoy.delegate = self;
-    
+
     self.mapView = [MKMapView new];
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
@@ -44,7 +46,16 @@
     [self.mapView addSubview:self.maskView];
     
     self.avatarImageView = [UIImageView new];
-    self.avatarImageView.image = [UIImage imageNamed:@"avatar"];
+    
+    if ([[Helper getInstance] userPhoto] != nil) {
+        
+        self.avatarImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[[Helper getInstance] userPhoto]]];
+        
+    } else {
+        
+        self.avatarImageView.image = [UIImage imageNamed:@"avatar"];
+    }
+    
     self.avatarImageView.clipsToBounds = YES;
     self.avatarImageView.layer.cornerRadius = 30.0;
     self.avatarImageView.layer.borderWidth = 1.0;
@@ -91,15 +102,20 @@
     
     // dummy
     
-    if ([self retrieveData] != nil) {
+    /*if ([Utils getLocationsFromFirebase].count > 0) {
         
-        dummyData = [self retrieveData];
+        dummyData = (NSMutableArray*)[Utils getLocationsFromFirebase];
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.125 target:self selector:@selector(drawOnMap) userInfo:nil repeats:true];
+
     } else {
         
         dummyData = [NSMutableArray new];
-    }
+    }*/
     
-    [NSTimer scheduledTimerWithTimeInterval:0.125 target:self selector:@selector(drawOnMap) userInfo:nil repeats:true];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewLocationsAdded:) name: @"newLocationAdded" object:nil];
+    
+    [Utils observeNewLocations];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -140,7 +156,6 @@
     
     [_mapView addOverlay:self.devBoy.routePolyline];
     [_mapView setRegion:self.devBoy.routeRegion animated:YES];
-    [self saveDataFromArray:dummyData];
 }
 
 - (void)devBoyDidUpdate:(DevBoy *)devBoy {
@@ -168,12 +183,52 @@
     NSLog(@"longitude :: %f latitude :: %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
     
     if (_tracking) {
-        [mapView setRegion:MKCoordinateRegionMake(userLocation.coordinate, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
-        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.longitude]];
-        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.latitude]];
+//        [mapView setRegion:MKCoordinateRegionMake(userLocation.coordinate, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+//        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.longitude]];
+//        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.latitude]];
+        NSString *latitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.latitude];
+        NSString *longitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.longitude];
+        
+        [Utils storeLocationsWithLatitudeWithLatitude:latitude andLongitude:longitude];
     }
 }
 
+#pragma mark - HANDLE FIREBASE DATA.
+
+- (void) handleNewLocationsAdded:(NSNotification*) notification {
+    
+    NSDictionary *location = notification.object;
+    
+    [self centerMapOnThisLocation:location];
+
+    [self storeAndUpdateUIWithThisLocation:location];
+    
+//    [self drawPolyLine];
+}
+
+- (void) centerMapOnThisLocation: (NSDictionary*) location {
+
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[location valueForKey:@"latitude"] floatValue], [[location valueForKey:@"longitude"] floatValue]);
+    [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+}
+
+- (void) storeAndUpdateUIWithThisLocation: (NSDictionary*) location {
+    
+    [_devBoy handleLocationUpdate:[[CLLocation alloc] initWithLatitude:[[location valueForKey:@"latitude"] floatValue] longitude:[[location valueForKey:@"longitude"] floatValue]]];
+    
+    // store longitude first then latitude values.
+    
+    [_devBoy.routeLocations addObject:[[CLLocation alloc] initWithLatitude:[[location valueForKey:@"longitude"] floatValue] longitude:[[location valueForKey:@"latitude"] floatValue]]];
+    
+}
+
+- (void) drawPolyLine {
+    
+    [_devBoy createPolylineForRoute];
+    [_devBoy createRegionForRoute];
+    [_mapView addOverlay:self.devBoy.routePolyline];
+    [_mapView setRegion:self.devBoy.routeRegion animated:YES];
+}
 
 #pragma mark - SAVE DATA
 
@@ -264,16 +319,7 @@
         counter += 2;
     }
     
-    
 
-    
-
-
-
-    
-    
-    
-  
 }
 
 @end

@@ -7,7 +7,9 @@
 //
 
 #import "AppDelegate.h"
-#import "DemoView.h"
+#import "LoginView.h"
+@import Firebase;
+@import GoogleSignIn;
 
 @interface AppDelegate ()
 
@@ -20,10 +22,24 @@
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = [DemoView new];
+    self.window.rootViewController = [LoginView new];
     [self.window makeKeyAndVisible];
     NSLog(@"%@", [self getDocumentsPath]);
+    
+    // Use Firebase library to configure APIs
+    
+    [FIRApp configure];
+    
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
+    NSLog(@"%@", url);
+    
+    NSLog(@"%@", sourceApplication);
+    
+    return [[GIDSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 
 - (NSString *)getDocumentsPath

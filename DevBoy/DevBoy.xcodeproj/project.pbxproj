@@ -11,6 +11,10 @@
 		5706A9061DBBB6F60057D764 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5706A9051DBBB6F60057D764 /* AppDelegate.m */; };
 		5706A90E1DBBB6F60057D764 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5706A90D1DBBB6F60057D764 /* Assets.xcassets */; };
 		5706A9111DBBB6F60057D764 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5706A90F1DBBB6F60057D764 /* LaunchScreen.storyboard */; };
+		573744791DCF7367002504C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 573744781DCF7367002504C2 /* GoogleService-Info.plist */; };
+		5737447D1DCF7787002504C2 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5737447C1DCF7787002504C2 /* LoginView.m */; };
+		573744811DCF8F2B002504C2 /* Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 573744801DCF8F2B002504C2 /* Helper.m */; };
+		576BA3F71DD75C0C0005B369 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576BA3F61DD75C0C0005B369 /* Utils.swift */; };
 		57CFA2571DC10F8E002FA2A0 /* DevBoy.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFA2561DC10F8E002FA2A0 /* DevBoy.m */; };
 		57CFA25B1DC11285002FA2A0 /* DemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFA25A1DC11285002FA2A0 /* DemoView.m */; };
 		57CFA25F1DC114F0002FA2A0 /* MetricView.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFA25E1DC114F0002FA2A0 /* MetricView.m */; };
@@ -28,6 +32,13 @@
 		5706A90D1DBBB6F60057D764 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		5706A9101DBBB6F60057D764 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5706A9121DBBB6F60057D764 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		573744781DCF7367002504C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5737447B1DCF7787002504C2 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		5737447C1DCF7787002504C2 /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
+		5737447F1DCF8F2B002504C2 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
+		573744801DCF8F2B002504C2 /* Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Helper.m; sourceTree = "<group>"; };
+		576BA3F51DD75C0B0005B369 /* DevBoy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "DevBoy-Bridging-Header.h"; path = "Utils/DevBoy-Bridging-Header.h"; sourceTree = "<group>"; };
+		576BA3F61DD75C0C0005B369 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		57CFA2551DC10F8E002FA2A0 /* DevBoy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevBoy.h; sourceTree = "<group>"; };
 		57CFA2561DC10F8E002FA2A0 /* DevBoy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevBoy.m; sourceTree = "<group>"; };
 		57CFA2591DC11285002FA2A0 /* DemoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoView.h; sourceTree = "<group>"; };
@@ -76,6 +87,9 @@
 		5706A9001DBBB6F60057D764 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				576BA3F41DD75BF30005B369 /* Utils */,
+				5737447E1DCF8F1D002504C2 /* Helper */,
+				5737447A1DCF7770002504C2 /* LoginView */,
 				57CFA2581DC11271002FA2A0 /* DemoView */,
 				57CFA25C1DC114D4002FA2A0 /* MetricView */,
 				5706A9041DBBB6F60057D764 /* AppDelegate.h */,
@@ -90,11 +104,39 @@
 		5706A9011DBBB6F60057D764 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				576BA3F51DD75C0B0005B369 /* DevBoy-Bridging-Header.h */,
+				573744781DCF7367002504C2 /* GoogleService-Info.plist */,
 				57CFA2611DC115B7002FA2A0 /* Fonts */,
 				5706A9121DBBB6F60057D764 /* Info.plist */,
 				5706A9021DBBB6F60057D764 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5737447A1DCF7770002504C2 /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				5737447B1DCF7787002504C2 /* LoginView.h */,
+				5737447C1DCF7787002504C2 /* LoginView.m */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		5737447E1DCF8F1D002504C2 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				5737447F1DCF8F2B002504C2 /* Helper.h */,
+				573744801DCF8F2B002504C2 /* Helper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		576BA3F41DD75BF30005B369 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				576BA3F61DD75C0C0005B369 /* Utils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		57CFA2541DC10F6C002FA2A0 /* Source */ = {
@@ -196,6 +238,7 @@
 					5706A8FD1DBBB6F60057D764 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = WK247W7C8M;
+						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -228,6 +271,7 @@
 				57CFA2641DC115CC002FA2A0 /* Raleway-Bold.ttf in Resources */,
 				5706A90E1DBBB6F60057D764 /* Assets.xcassets in Resources */,
 				57CFA2651DC115CC002FA2A0 /* Raleway-Regular.ttf in Resources */,
+				573744791DCF7367002504C2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,11 +330,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5737447D1DCF7787002504C2 /* LoginView.m in Sources */,
 				5706A9061DBBB6F60057D764 /* AppDelegate.m in Sources */,
 				57CFA25B1DC11285002FA2A0 /* DemoView.m in Sources */,
 				57CFA2571DC10F8E002FA2A0 /* DevBoy.m in Sources */,
+				573744811DCF8F2B002504C2 /* Helper.m in Sources */,
 				57CFA25F1DC114F0002FA2A0 /* MetricView.m in Sources */,
 				5706A9031DBBB6F60057D764 /* main.m in Sources */,
+				576BA3F71DD75C0C0005B369 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +359,7 @@
 		5706A9131DBBB6F60057D764 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -333,6 +381,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -360,6 +409,7 @@
 		5706A9141DBBB6F60057D764 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -381,6 +431,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -404,11 +455,16 @@
 			baseConfigurationReference = 71E905D8FA8253BF93454C0D /* Pods-DevBoy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WK247W7C8M;
 				INFOPLIST_FILE = DevBoy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hungerstation.ios.DevBoy.DevBoy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DevBoy/Utils/DevBoy-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -417,11 +473,15 @@
 			baseConfigurationReference = EAF2C9694DF295CCDDE9DD4D /* Pods-DevBoy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WK247W7C8M;
 				INFOPLIST_FILE = DevBoy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hungerstation.ios.DevBoy.DevBoy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DevBoy/Utils/DevBoy-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
