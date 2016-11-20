@@ -10,17 +10,24 @@ import UIKit
 import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
-
+import Firebase
 @objc class Utils: NSObject {
     
     
     static var locationsRef = FIRDatabase.database().reference().child("locations")
     
+    static var demoView: DemoView?
+    
     override init() {
         
         super.init()
-        
+
         print(Utils.locationsRef)
+        
+        if !(Utils.demoView?.tracking)! {
+            
+            Utils.locationsRef.removeValue()
+        }
     }
     
     class func storeLocationsWithLatitude(latitude: String, andLongitude longitude: String) {
@@ -39,9 +46,12 @@ import FirebaseAuth
             
             print(snapshot.value ?? "Empty Location")
             
-            if let dict = snapshot.value as? [String : String] {
+            if let dict = snapshot.value as? [String : String]  {
                 
-                NotificationCenter.default.post(name: NSNotification.Name("newLocationAdded"), object: dict)
+                if (demoView?.tracking)! {
+                    
+                    NotificationCenter.default.post(name: NSNotification.Name("newLocationAdded"), object: dict)
+                }
             }
         }
         

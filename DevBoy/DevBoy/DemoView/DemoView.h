@@ -28,4 +28,6 @@
 @property (nonatomic, strong) MetricView *averageAltitudeView;
 @property (nonatomic, strong) MetricView *maxAltitudeView;
 
+@property BOOL tracking;
+
 @end

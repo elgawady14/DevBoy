@@ -10,10 +10,10 @@
 #import <UIView+Facade.h>
 #import "Helper.h"
 #import "DevBoy-Swift.h"
+#import <FirebaseDatabase/FirebaseDatabase.h>
 
 @interface DemoView () {
     
-    BOOL _tracking;
     NSMutableArray *dummyData;
     NSTimer *timer;
     int counter;
@@ -100,20 +100,10 @@
     self.maxAltitudeView = [[MetricView alloc] initWithImage:[UIImage imageNamed:@"maxAlt"] title:@"Max Altitude" color:[UIColor whiteColor]];
     [self.containerView addSubview:self.maxAltitudeView];
     
-    // dummy
-    
-    /*if ([Utils getLocationsFromFirebase].count > 0) {
-        
-        dummyData = (NSMutableArray*)[Utils getLocationsFromFirebase];
-        
-        [NSTimer scheduledTimerWithTimeInterval:0.125 target:self selector:@selector(drawOnMap) userInfo:nil repeats:true];
-
-    } else {
-        
-        dummyData = [NSMutableArray new];
-    }*/
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewLocationsAdded:) name: @"newLocationAdded" object:nil];
+    
+    Utils.demoView = self;
     
     [Utils observeNewLocations];
 }
@@ -154,8 +144,7 @@
     
     [self.devBoy endRouteTracking];
     
-    [_mapView addOverlay:self.devBoy.routePolyline];
-    [_mapView setRegion:self.devBoy.routeRegion animated:YES];
+    [[[[FIRDatabase database] reference] child:@"locations"] removeValue];
 }
 
 - (void)devBoyDidUpdate:(DevBoy *)devBoy {
@@ -167,14 +156,28 @@
     self.maxAltitudeView.valueLabel.text = [NSString stringWithFormat:@"%.0f ft", [devBoy maximumAltitudeWithUnit:DistanceUnitFeet]];
 }
 
++(UIImage*) imageWithColor:(UIColor*)color andSize:(CGSize)size{
+    UIImage* img=nil;
+    
+    CGRect rect=CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+    CGContextRef context=UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, rect);
+    img=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
 
 #pragma mark - Map view delegate
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    renderer.fillColor = [UIColor colorWithRed:250/255.0 green:90/255.0 blue:45/255.0 alpha:1.0];
-    renderer.strokeColor = [UIColor colorWithRed:250/255.0 green:90/255.0 blue:45/255.0 alpha:1.0];
-    renderer.lineWidth = 5;
+    UIColor *yellow = [UIColor colorWithRed:254.0/255 green:206.0/255 blue:9.0/255 alpha:1.0];
+    renderer.fillColor = yellow;
+    renderer.strokeColor = yellow;
+    renderer.lineWidth = 10;
     return renderer;
 }
 
@@ -183,14 +186,26 @@
     NSLog(@"longitude :: %f latitude :: %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
     
     if (_tracking) {
-//        [mapView setRegion:MKCoordinateRegionMake(userLocation.coordinate, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
-//        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.longitude]];
-//        [dummyData addObject:[NSString stringWithFormat:@"%f", userLocation.coordinate.latitude]];
+
         NSString *latitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.latitude];
         NSString *longitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.longitude];
         
         [Utils storeLocationsWithLatitudeWithLatitude:latitude andLongitude:longitude];
     }
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+    
+    if ([[annotation title] isEqualToString:@"Current Location"]) {
+        return nil;
+    }
+    
+    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"currentloc"];
+    annView.image = [ UIImage imageNamed:@"cycle" ];
+    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    annView.rightCalloutAccessoryView = infoButton;
+    annView.canShowCallout = YES;
+    return annView;
 }
 
 #pragma mark - HANDLE FIREBASE DATA.
@@ -201,25 +216,28 @@
     
     [self centerMapOnThisLocation:location];
 
-    [self storeAndUpdateUIWithThisLocation:location];
-    
-//    [self drawPolyLine];
+    [self updateUIWithThisLocation:location];
 }
 
 - (void) centerMapOnThisLocation: (NSDictionary*) location {
 
-    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[location valueForKey:@"latitude"] floatValue], [[location valueForKey:@"longitude"] floatValue]);
-    [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+    if (_tracking) {
+        
+        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[location valueForKey:@"latitude"] floatValue], [[location valueForKey:@"longitude"] floatValue]);
+        [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
+    }
 }
 
-- (void) storeAndUpdateUIWithThisLocation: (NSDictionary*) location {
+- (void) updateUIWithThisLocation: (NSDictionary*) location {
+  
+     [self.devBoy createPolylineForRoute];
+     [self.devBoy createRegionForRoute];
     
-    [_devBoy handleLocationUpdate:[[CLLocation alloc] initWithLatitude:[[location valueForKey:@"latitude"] floatValue] longitude:[[location valueForKey:@"longitude"] floatValue]]];
+     if (self.devBoy.routePolyline != nil) {
     
-    // store longitude first then latitude values.
-    
-    [_devBoy.routeLocations addObject:[[CLLocation alloc] initWithLatitude:[[location valueForKey:@"longitude"] floatValue] longitude:[[location valueForKey:@"latitude"] floatValue]]];
-    
+        [_mapView addOverlay:self.devBoy.routePolyline];
+        [_mapView setRegion:self.devBoy.routeRegion animated:YES];
+     }
 }
 
 - (void) drawPolyLine {

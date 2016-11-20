@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[DemoView mapView:viewForAnnotation:]:DemoView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[UIImage imageNamed:@&quot;cycle&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[DemoView viewDidLoad]:DemoView.m">
          <PersistentStrings>
             <PersistentString

@@ -152,9 +152,8 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
     }
     
     [self.locationManager stopUpdatingLocation];
-    
-    [self createPolylineForRoute];
-    [self createRegionForRoute];
+//    self.locationManager = nil;
+//    self.locationManager.delegate = nil;
 }
 
 

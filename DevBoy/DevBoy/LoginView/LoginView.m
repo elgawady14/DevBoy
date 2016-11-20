@@ -36,16 +36,16 @@
 
 -(void) preSettings {
     
-    self.view.backgroundColor = [UIColor darkGrayColor];
+    self.view.backgroundColor = [UIColor blackColor];
     
-    buttonLogInAnony = [[UIButton alloc] initWithFrame:CGRectMake(50, 200, 150, 30)];
+    buttonLogInAnony = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 80, 200, 160, 40)];
     [buttonLogInAnony setTitle:@"Anonymous" forState:UIControlStateNormal];
-    buttonLogInAnony.layer.borderWidth = 2.0;
+    buttonLogInAnony.layer.borderWidth = 0.5;
     buttonLogInAnony.layer.borderColor = [[UIColor whiteColor] CGColor];
 
-    buttonLogInGoogle = [[UIButton alloc] initWithFrame:CGRectMake(50, 250, 150, 30)];
-    [buttonLogInGoogle setTitle:@"Google" forState:UIControlStateNormal];
-    buttonLogInGoogle.layer.borderWidth = 2.0;
+    buttonLogInGoogle = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 80, 250, 160, 30)];
+    [buttonLogInGoogle setTitle:@"Google+" forState:UIControlStateNormal];
+    buttonLogInGoogle.layer.borderWidth = 0.5;
     buttonLogInGoogle.layer.borderColor = [[UIColor whiteColor] CGColor];
 
     
