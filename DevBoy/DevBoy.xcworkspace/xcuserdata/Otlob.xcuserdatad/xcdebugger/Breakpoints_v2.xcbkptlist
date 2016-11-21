@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DevBoy/DemoView/DemoView.m"
-            timestampString = "501428862.808855"
+            timestampString = "501436390.991987"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "-handleNewLocationsAdded:"
             landmarkType = "7">
          </BreakpointContent>
