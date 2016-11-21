@@ -116,7 +116,7 @@
     
     Utils.demoView = self;
     
-    [Utils observeNewLocations];
+    //[Utils observeNewLocations];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -156,8 +156,6 @@
     [self.devBoy endRouteTracking];
     
     [[Utils locationsRef] removeValue];
-
-//    [[Utils locationsRef] removeValue];
 }
 
 - (void)devBoyDidUpdate:(DevBoy *)devBoy {
@@ -187,7 +185,6 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-//    UIColor *yellow = [UIColor colorWithRed:254.0/255 green:206.0/255 blue:9.0/255 alpha:1.0];
     UIColor *lightBlue = [UIColor colorWithRed:43.0/255 green:169.0/255 blue:223.0/255 alpha:1.0];
     renderer.fillColor = lightBlue;
     renderer.strokeColor = lightBlue;
@@ -205,10 +202,12 @@
         NSString *longitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.longitude];
         
         [Utils storeLocationsWithLatitudeWithLatitude:latitude andLongitude:longitude];
+        
+        [self centerMapOnThisLocation: userLocation];
     }
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
+/*- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
     
     if ([[annotation title] isEqualToString:@"Current Location"]) {
         return nil;
@@ -220,26 +219,24 @@
     annView.rightCalloutAccessoryView = infoButton;
     annView.canShowCallout = YES;
     return annView;
-}
+}*/
 
 #pragma mark - HANDLE FIREBASE DATA.
 
 - (void) handleNewLocationsAdded:(NSNotification*) notification {
     
-    NSDictionary *location = notification.object;
+    //NSDictionary *location = notification.object;
     
-    [self centerMapOnThisLocation:location];
-
-    //[self updateUIWithThisLocation:location];
+    //[self centerMapOnThisLocation:location];
 }
 
-- (void) centerMapOnThisLocation: (NSDictionary*) location {
+- (void) centerMapOnThisLocation: (MKUserLocation *) location {
 
-//    if (_tracking) {
+    if (_tracking) {
     
-        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[location valueForKey:@"latitude"] floatValue], [[location valueForKey:@"longitude"] floatValue]);
+        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
         [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
-//    }
+    }
 }
 
 - (void) updateUIWithThisLocation: (NSDictionary*) location {

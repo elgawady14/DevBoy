@@ -31,9 +31,7 @@
     // Use Firebase library to configure APIs
     
     [FIRApp configure];
-    
-    [[FIRDatabase database] setPersistenceEnabled:false];
-    
+        
     return YES;
 }
 
