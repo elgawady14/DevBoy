@@ -18,5 +18,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "static Utils.(observeNewLocations() -&gt; ()).(closure #1):Utils.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "snapshot.value as? Bool">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>

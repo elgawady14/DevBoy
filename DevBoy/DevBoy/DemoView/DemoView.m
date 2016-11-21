@@ -63,7 +63,6 @@
     [self.maskView addSubview:self.avatarImageView];
     
     self.dateLabel = [UILabel new];
-    self.dateLabel.text = @"July 17th, 2015";
     self.dateLabel.font = [UIFont fontWithName:@"Raleway-Bold" size:19];
     self.dateLabel.textColor = [UIColor colorWithRed:.8 green:.8 blue:.8 alpha:1.0];
     [self.maskView addSubview:self.dateLabel];
@@ -99,7 +98,19 @@
     
     self.maxAltitudeView = [[MetricView alloc] initWithImage:[UIImage imageNamed:@"maxAlt"] title:@"Max Altitude" color:[UIColor whiteColor]];
     [self.containerView addSubview:self.maxAltitudeView];
+
+    [self preSettings];
+}
+
+- (void) preSettings {
     
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+    
+    NSInteger day = [components day];
+    NSInteger week = [components month];
+    NSInteger year = [components year];
+    NSString *string = [NSString stringWithFormat:@"%ld.%ld.%ld", (long)day, (long)week, (long)year];
+    self.dateLabel.text = string;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewLocationsAdded:) name: @"newLocationAdded" object:nil];
     
@@ -144,7 +155,9 @@
     
     [self.devBoy endRouteTracking];
     
-    [[[[FIRDatabase database] reference] child:@"locations"] removeValue];
+    [[Utils locationsRef] removeValue];
+
+//    [[Utils locationsRef] removeValue];
 }
 
 - (void)devBoyDidUpdate:(DevBoy *)devBoy {
@@ -174,9 +187,10 @@
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    UIColor *yellow = [UIColor colorWithRed:254.0/255 green:206.0/255 blue:9.0/255 alpha:1.0];
-    renderer.fillColor = yellow;
-    renderer.strokeColor = yellow;
+//    UIColor *yellow = [UIColor colorWithRed:254.0/255 green:206.0/255 blue:9.0/255 alpha:1.0];
+    UIColor *lightBlue = [UIColor colorWithRed:43.0/255 green:169.0/255 blue:223.0/255 alpha:1.0];
+    renderer.fillColor = lightBlue;
+    renderer.strokeColor = lightBlue;
     renderer.lineWidth = 10;
     return renderer;
 }
@@ -216,16 +230,16 @@
     
     [self centerMapOnThisLocation:location];
 
-    [self updateUIWithThisLocation:location];
+    //[self updateUIWithThisLocation:location];
 }
 
 - (void) centerMapOnThisLocation: (NSDictionary*) location {
 
-    if (_tracking) {
-        
+//    if (_tracking) {
+    
         CLLocationCoordinate2D coor = CLLocationCoordinate2DMake([[location valueForKey:@"latitude"] floatValue], [[location valueForKey:@"longitude"] floatValue]);
         [_mapView setRegion:MKCoordinateRegionMake(coor, MKCoordinateSpanMake(.0005, .0005)) animated:YES];
-    }
+//    }
 }
 
 - (void) updateUIWithThisLocation: (NSDictionary*) location {

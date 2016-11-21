@@ -11,6 +11,7 @@
 @import Firebase;
 @import GoogleSignIn;
 #import <Firebase.h>
+#import "DevBoy-Swift.h"
 
 @interface AppDelegate ()
 
@@ -32,7 +33,7 @@
     [FIRApp configure];
     
     [[FIRDatabase database] setPersistenceEnabled:false];
-
+    
     return YES;
 }
 
@@ -77,7 +78,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
-    [[[[FIRDatabase database] reference] child:@"locations"] removeValue];
+    [[Utils locationsRef] removeValue];
 }
 
 

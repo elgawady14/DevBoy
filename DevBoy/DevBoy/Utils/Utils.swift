@@ -14,7 +14,7 @@ import Firebase
 @objc class Utils: NSObject {
     
     
-    static var locationsRef = FIRDatabase.database().reference().child("locations")
+    static var locationsRef = FIRDatabase.database().reference().child("locations3")
     
     static var demoView: DemoView?
     
@@ -28,6 +28,9 @@ import Firebase
             
             Utils.locationsRef.removeValue()
         }
+        
+//        FIRDatabase.database().persistenceEnabled = true
+//        Utils.locationsRef.keepSynced(true)
     }
     
     class func storeLocationsWithLatitude(latitude: String, andLongitude longitude: String) {
@@ -42,18 +45,21 @@ import Firebase
     
     class func observeNewLocations() {
         
-        locationsRef.observe(.childAdded) {(snapshot: FIRDataSnapshot) in
+        locationsRef.observe(.value) {(snapshot: FIRDataSnapshot) in
             
             print(snapshot.value ?? "Empty Location")
             
             if let dict = snapshot.value as? [String : String]  {
                 
-                if (demoView?.tracking)! {
-                    
+//                if (demoView?.tracking)! {
+                
                     NotificationCenter.default.post(name: NSNotification.Name("newLocationAdded"), object: dict)
-                }
+//                }
             }
         }
+    
+        
+
         
     }
 
