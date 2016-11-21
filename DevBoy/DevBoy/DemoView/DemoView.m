@@ -207,20 +207,6 @@
     }
 }
 
-/*- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation {
-    
-    if ([[annotation title] isEqualToString:@"Current Location"]) {
-        return nil;
-    }
-    
-    MKAnnotationView *annView = [[MKAnnotationView alloc ] initWithAnnotation:annotation reuseIdentifier:@"currentloc"];
-    annView.image = [ UIImage imageNamed:@"cycle" ];
-    UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    annView.rightCalloutAccessoryView = infoButton;
-    annView.canShowCallout = YES;
-    return annView;
-}*/
-
 #pragma mark - HANDLE FIREBASE DATA.
 
 - (void) handleNewLocationsAdded:(NSNotification*) notification {
