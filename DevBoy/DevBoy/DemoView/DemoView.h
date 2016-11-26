@@ -30,4 +30,6 @@
 
 @property BOOL tracking;
 
+- (void) centerMapOnThisLocation: (CLLocation *) location;
+
 @end

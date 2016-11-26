@@ -143,6 +143,8 @@
     [self.trackingButton removeTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
     [self.trackingButton addTarget:self action:@selector(stop) forControlEvents:UIControlEventTouchUpInside];
     
+    self.devBoy.demoView = self;
+    
     [self.devBoy beginRouteTracking];
 }
 
@@ -192,19 +194,19 @@
     return renderer;
 }
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+- (void) mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
-    NSLog(@"longitude :: %f latitude :: %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
+    //NSLog(@"longitude :: %f latitude :: %f", userLocation.coordinate.longitude, userLocation.coordinate.latitude);
     
-    if (_tracking) {
+    /*if (_tracking) {
 
         NSString *latitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.latitude];
         NSString *longitude = [NSString stringWithFormat:@"%f", userLocation.coordinate.longitude];
         
-        [Utils storeLocationsWithLatitudeWithLatitude:latitude andLongitude:longitude];
+        [Utils storeLocationsWithLatitudeWithLatitude: latitude andLongitude:longitude];
         
         [self centerMapOnThisLocation: userLocation];
-    }
+    }*/
 }
 
 #pragma mark - HANDLE FIREBASE DATA.
@@ -216,7 +218,7 @@
     //[self centerMapOnThisLocation:location];
 }
 
-- (void) centerMapOnThisLocation: (MKUserLocation *) location {
+- (void) centerMapOnThisLocation: (CLLocation *) location {
 
     if (_tracking) {
     

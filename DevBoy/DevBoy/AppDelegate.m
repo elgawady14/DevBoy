@@ -31,6 +31,8 @@
     // Use Firebase library to configure APIs
     
     [FIRApp configure];
+    
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval: UIApplicationBackgroundFetchIntervalMinimum];
         
     return YES;
 }

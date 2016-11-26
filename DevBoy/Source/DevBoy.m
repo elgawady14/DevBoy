@@ -7,6 +7,8 @@
 //
 
 #import "DevBoy.h"
+#import "DevBoy-Swift.h"
+#import "DemoView.h"
 
 static CGFloat const kRegionPaddingMultiplier = 1.33;
 
@@ -57,7 +59,7 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
 @end
 
 @implementation DevBoy
-
+@synthesize demoView;
 
 #pragma mark - Initialization
 
@@ -109,14 +111,14 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
     
     self.segmentStartDate = [NSDate date];
     
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
     }
     
     [self.locationManager startUpdatingLocation];
 }
 
-- (void)pauseRouteTracking {
+- (void) pauseRouteTracking {
     NSAssert(_trackingState == TrackingStateTracking, @"You can only pause Follower tracking when it is actively tracking.");
     
     _trackingState = TrackingStatePaused;
@@ -171,7 +173,7 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
     
     // Distance
     //
-    self.totalDistance += [location distanceFromLocation:self.previousLocation];
+    self.totalDistance += [location distanceFromLocation: self.previousLocation];
     self.previousLocation = location;
     
     // Altitude
@@ -350,9 +352,19 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.routeLocations addObjectsFromArray:locations];
     
+    NSLog(@"didUpdateLocations called @@@");
+    
     for (CLLocation *location in locations) {
         [self handleLocationUpdate:location];
+        
+        NSString *latitude = [NSString stringWithFormat:@"%f", location.coordinate.latitude];
+        NSString *longitude = [NSString stringWithFormat:@"%f", location.coordinate.longitude];
+        
+        [Utils storeLocationsWithLatitudeWithLatitude: latitude andLongitude: longitude];
+        
+        [demoView centerMapOnThisLocation: location];
     }
+    
 }
 
 

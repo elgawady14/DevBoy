@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+@class DemoView;
 
 @class DevBoy;
 
@@ -55,6 +56,8 @@ typedef NS_ENUM(NSUInteger, SpeedUnit) {
 @property (nonatomic, readonly) MKCoordinateRegion routeRegion;
 
 @property (nonatomic, readonly) TrackingState trackingState;
+
+@property (nonatomic, strong) DemoView *demoView;
 
 - (void)beginRouteTracking;
 
