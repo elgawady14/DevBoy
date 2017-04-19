@@ -17,6 +17,38 @@
             endingLineNumber = "122"
             landmarkName = "-pauseRouteTracking"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[DevBoy pauseRouteTracking]"
+                  moduleName = "DevBoy"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Otlob/Otlob%20Inc/Demos/DevBoy/DevBoy/Source/DevBoy.m"
+                  timestampString = "514311201.607052"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "122"
+                  endingLineNumber = "122"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[DevBoy pauseRouteTracking]"
+                  moduleName = "DevBoy"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Otlob/Otlob%20Inc/Demos/DevBoy/DevBoy/Source/DevBoy.m"
+                  timestampString = "514311201.611647"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "122"
+                  endingLineNumber = "122"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

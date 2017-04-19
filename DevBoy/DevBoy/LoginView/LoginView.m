@@ -37,7 +37,7 @@
 
 -(void) preSettings {
     
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor brownColor];
     
     buttonLogInAnony = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 80, 200, 160, 40)];
     [buttonLogInAnony setTitle:@"Anonymous" forState:UIControlStateNormal];

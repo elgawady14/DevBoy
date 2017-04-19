@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:13/255.0 green:14/255.0 blue:20/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor brownColor];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.devBoy = [DevBoy new];
