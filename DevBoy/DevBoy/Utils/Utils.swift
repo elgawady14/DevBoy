@@ -30,13 +30,12 @@ import Firebase
         }
     }
     
-    class func storeLocationsWithLatitude(latitude: String, andLongitude longitude: String) {
+    class func storeLocation(_ location: CLLocation) {
         
         let newLocation = locationsRef.childByAutoId()
-
-        let messageData: [String : String] = ["latitude" : latitude, "longitude" : longitude]
         
-        newLocation.setValue(messageData)
+        let locationData: [String : String] = ["latitude" : String(location.coordinate.latitude), "longitude" : String(location.coordinate.longitude), "altitude" : String(location.altitude), "horizontalAccuracy" : String(location.horizontalAccuracy), "verticalAccuracy" : String(location.verticalAccuracy), "course" : String(location.course), "speed" : String(location.speed), "timestamp" : String(describing: location.timestamp)]
+        newLocation.setValue(locationData)
     }
     
     

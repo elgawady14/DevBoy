@@ -358,20 +358,17 @@ static CLLocationSpeed const kMpsToMph = 2.2369;
     
     if (currentLocation != nil) {
         
-        NSString *latitude = [NSString stringWithFormat:@"%f", currentLocation.coordinate.latitude];
-        NSString *longitude = [NSString stringWithFormat:@"%f", currentLocation.coordinate.longitude];
-        
         if (self.previousLocation != nil) {
             
             if (currentLocation.coordinate.latitude != self.previousLocation.coordinate.longitude && currentLocation.coordinate.longitude != self.previousLocation.coordinate.longitude) {
                 
                 // avoid redundancy coordinates.
-                [Utils storeLocationsWithLatitudeWithLatitude: latitude andLongitude: longitude];
+                [Utils storeLocation: currentLocation];
             }
         }
         else {
             
-            [Utils storeLocationsWithLatitudeWithLatitude: latitude andLongitude: longitude];
+            [Utils storeLocation: currentLocation];
         }
         
         [demoView centerMapOnThisLocation: currentLocation];
